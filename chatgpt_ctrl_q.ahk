@@ -5,6 +5,7 @@
     static saved := 0
     DetectHiddenWindows true
 
+    ; Si déjà cachée → remettre
     if saved && WinExist("ahk_id " saved) {
         WinShow("ahk_id " saved)
         WinActivate("ahk_id " saved)
@@ -12,6 +13,7 @@
         return
     }
 
+    ; Chercher la fenêtre ChatGPT (WebView2)
     hwnd := 0
     for h in WinGetList("ahk_exe msedgewebview2.exe")
         if InStr(WinGetTitle("ahk_id " h), "ChatGPT")
@@ -20,7 +22,9 @@
     if !hwnd
         return
 
+    ; Cacher et mémoriser
     saved := hwnd
     WinHide("ahk_id " hwnd)
 }
+
 
