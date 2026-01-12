@@ -4,7 +4,7 @@
 ; CTRL + Q ferme l'application ChatGPT
 ^q::
 {
-    WinGetTitle title, "A"
+    title := WinGetTitle("A")
     if InStr(title, "ChatGPT")
     {
         WinClose("A")
