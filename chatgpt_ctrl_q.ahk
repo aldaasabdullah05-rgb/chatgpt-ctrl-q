@@ -1,30 +1,25 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
+DetectHiddenWindows true
 
-^q:: {
-    static saved := 0
-    DetectHiddenWindows true
+^q::{
+    static hwnd := 0
 
-    ; Si déjà cachée → remettre
-    if saved && WinExist("ahk_id " saved) {
-        WinShow("ahk_id " saved)
-        WinActivate("ahk_id " saved)
-        saved := 0
+    ; Si la fenêtre est déjà cachée → on la remet
+    if (hwnd && WinExist("ahk_id " hwnd)) {
+        WinShow("ahk_id " hwnd)
+        WinActivate("ahk_id " hwnd)
+        hwnd := 0
         return
     }
 
-    ; Chercher la fenêtre ChatGPT (WebView2)
-    hwnd := 0
-    for h in WinGetList("ahk_exe msedgewebview2.exe")
-        if InStr(WinGetTitle("ahk_id " h), "ChatGPT")
+    ; Cherche la fenêtre ChatGPT
+    for h in WinGetList("ahk_exe msedgewebview2.exe") {
+        title := WinGetTitle("ahk_id " h)
+        if InStr(title, "ChatGPT") {
             hwnd := h
-
-    if !hwnd
-        return
-
-    ; Cacher et mémoriser
-    saved := hwnd
-    WinHide("ahk_id " hwnd)
+            WinHide("ahk_id " hwnd)
+            return
+        }
+    }
 }
-
-
